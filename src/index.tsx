@@ -1,14 +1,7 @@
-// Fix: Manually define types for import.meta.env to work around vite/client type loading issues.
-interface ImportMetaEnv {
-    readonly DEV: boolean;
-}
-interface ImportMeta {
-    readonly env: ImportMetaEnv
-}
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import './styles/index.css';
 
 async function enableMocking() {
   if (import.meta.env.DEV) {

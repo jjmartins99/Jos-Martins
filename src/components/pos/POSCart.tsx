@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Product, CartItem } from '@/types';
 import { PlusIcon, MinusIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { mockProducts } from '@/mocks/data';
 
 // Business rules for cart limits
 const CART_LIMITS = {
@@ -81,7 +81,8 @@ const POSCart: React.FC<POSCartProps> = ({ initialProduct }) => {
 
     const newItems = [...items];
     const item = newItems[index];
-    const productPackage = mockProducts.find(p => p.id === item.productId)?.packages.find(pkg => pkg.name === item.selectedPackage);
+    const product = mockProducts.find(p => p.id === item.productId);
+    const productPackage = product?.packages.find(pkg => pkg.name === item.selectedPackage);
     
     if (productPackage) {
         item.quantity = newQuantity;
@@ -137,10 +138,6 @@ const POSCart: React.FC<POSCartProps> = ({ initialProduct }) => {
     </div>
   );
 };
-// This is needed for the component to receive props updates
+
 const MemoizedPOSCart = React.memo(POSCart);
 export default MemoizedPOSCart;
-// Mock products for demonstration as we don't have a backend yet
-const mockProducts: Product[] = [
-    { id: '1', name: 'Refrigerante 330ml', description: '', price: 150, imageUrl: '', kind: 'GOOD', trackStock: true, baseUnit: 'UN', currentStock: 100, packages: [{name: 'UN', factor: 1, ean: '6001234567890'}, {name: 'CX', factor: 24, ean: '6001234567891'}]}
-];

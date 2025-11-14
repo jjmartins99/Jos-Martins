@@ -1,11 +1,3 @@
-// Fix: Manually define types for import.meta.env to work around vite/client type loading issues.
-interface ImportMetaEnv {
-    readonly VITE_API_URL: string;
-}
-interface ImportMeta {
-    readonly env: ImportMetaEnv;
-}
-
 import axios from 'axios';
 
 const apiClient = axios.create({
