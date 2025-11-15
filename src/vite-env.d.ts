@@ -1,14 +1,13 @@
-// The reference to "vite/client" was removed because it could not be resolved,
-// causing a TypeScript error. The manual type definitions below are sufficient
-// for the project's use of import.meta.env.
+// This file provides type definitions for Vite's `import.meta.env` properties.
+// The default `/// <reference types="vite/client" />` was removed to resolve
+// a "Cannot find type definition file" error, and the necessary types
+// are defined explicitly below.
 
 interface ImportMetaEnv {
-  readonly VITE_API_URL: string;
+  /** True when running in development mode. */
   readonly DEV: boolean;
-  readonly PROD: boolean;
-  readonly MODE: string;
-  readonly BASE_URL: string;
-  readonly SSR: boolean;
+  /** The base URL for the application's API. */
+  readonly VITE_API_URL: string;
 }
 
 interface ImportMeta {

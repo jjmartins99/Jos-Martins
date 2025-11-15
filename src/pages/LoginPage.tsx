@@ -1,11 +1,11 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate, useLocation } from 'react-router-dom';
 import apiClient from '@/services/apiClient';
+import { AxiosError } from 'axios';
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -18,6 +18,7 @@ const LoginPage = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const [loginError, setLoginError] = useState<string | null>(null);
     const from = location.state?.from?.pathname || "/dashboard";
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormInputs>({
@@ -25,13 +26,18 @@ const LoginPage = () => {
     });
 
     const onSubmit = async (data: LoginFormInputs) => {
+        setLoginError(null);
         try {
             const response = await apiClient.post('/login', data);
             await login(response.data.token);
             navigate(from, { replace: true });
         } catch (error) {
             console.error("Falha no login", error);
-            // TODO: Mostrar erro na UI
+            if (error instanceof AxiosError && error.response?.status === 401) {
+                setLoginError("Credenciais inválidas. Verifique o seu email e senha.");
+            } else {
+                setLoginError("Ocorreu um erro. Por favor, tente novamente.");
+            }
         }
     };
 
@@ -39,6 +45,13 @@ const LoginPage = () => {
     <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-900">Iniciar Sessão</h2>
+        
+        {loginError && (
+            <div className="p-3 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                {loginError}
+            </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>

@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { User } from '@/types';
 
 interface ProtectedRouteProps {
-  // Fix: Change children prop type from JSX.Element to React.ReactNode to resolve 'Cannot find namespace JSX' error.
   children: React.ReactNode;
   roles?: User['role'][];
 }
@@ -26,7 +25,7 @@ const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
     return <Navigate to="/dashboard" replace state={{ error: "Acesso não autorizado" }} />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
